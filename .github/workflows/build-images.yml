@@ -55,6 +55,7 @@ jobs:
       run: |
         ./mvnw spring-boot:build-image \
           -pl todo-web \
+          -DskipTests \
           -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:web \
           -Dspring-boot.build-image.publish=true
 
@@ -102,5 +103,6 @@ jobs:
       run: |
         ./mvnw spring-boot:build-image \
           -pl todo-webflux \
+          -DskipTests \
           -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:webflux \
           -Dspring-boot.build-image.publish=true
