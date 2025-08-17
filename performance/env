@@ -1,0 +1,16 @@
+# PostgreSQL database configuration
+POSTGRES_PASSWORD=secret
+
+# Database connection pool settings
+SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=10
+SPRING_R2DBC_POOL_MAX_SIZE=10
+
+# R2DBC settings for webflux
+SPRING_R2DBC_URL=r2dbc:postgresql://postgres:5432/postgres
+SPRING_R2DBC_USERNAME=postgres
+SPRING_R2DBC_PASSWORD=secret
+
+# JPA/JDBC settings for web
+SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=secret

@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    env_file:
+      - ../env
+    environment:
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  app:
+    image: ghcr.io/tmiya-tech/20251115_sample-app/todo-app:webflux
+    restart: always
+    env_file:
+      - ../env
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+
+volumes:
+  postgres_data:
