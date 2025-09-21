@@ -34,3 +34,6 @@ build/
 
 ### mise ###
 mise.toml
+
+### Performance Reports ###
+/performance/*/reports/
