@@ -13,7 +13,7 @@ import com.example.sample.webflux.ec.service.EcService;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/ec")
+@RequestMapping("/api/ec")
 public class EcController {
 
     private final EcService ecService;

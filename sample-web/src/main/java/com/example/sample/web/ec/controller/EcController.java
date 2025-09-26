@@ -11,7 +11,7 @@ import com.example.sample.web.ec.dto.BuyItemRequest;
 import com.example.sample.web.ec.service.EcService;
 
 @RestController
-@RequestMapping("/ec")
+@RequestMapping("/api/ec")
 public class EcController {
 
     private final EcService ecService;
