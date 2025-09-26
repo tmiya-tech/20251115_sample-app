@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:15
+    image: postgres:18
     restart: always
     command: ["postgres", "-c", "max_connections=${POSTGRES_MAX_CONNECTIONS:-200}"]
     environment:
@@ -19,6 +19,13 @@ services:
         limits:
           cpus: '${POSTGRES_CPUS:-2.0}'
           memory: ${POSTGRES_MEMORY:-2G}
+  wiremock:
+    image: wiremock/wiremock:3x
+    restart: always
+    ports:
+      - "8081:8080"
+    volumes:
+      - ../../wiremock:/home/wiremock
 
 volumes:
   postgres_data:
