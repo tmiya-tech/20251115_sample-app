@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/shipping/setup"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "result": "scheduled"
+    },
+    "delayDistribution": {
+      "type": "lognormal",
+      "median": 500,
+      "sigma": 0.5
+    }
+  }
+}

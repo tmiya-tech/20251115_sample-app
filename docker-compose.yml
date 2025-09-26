@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:15
+    image: postgres:18
     restart: always
     environment:
       POSTGRES_PASSWORD: secret
@@ -8,6 +8,14 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  wiremock:
+    image: wiremock/wiremock:3x
+    restart: always
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./wiremock:/home/wiremock
 
 volumes:
   postgres_data:

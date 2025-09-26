@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/inventory/reserve"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "result": "reserved"
+    },
+    "delayDistribution": {
+      "type": "lognormal",
+      "median": 200,
+      "sigma": 0.3
+    }
+  }
+}
