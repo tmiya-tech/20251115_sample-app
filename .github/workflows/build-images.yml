@@ -8,10 +8,10 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: todo-app
+  IMAGE_NAME: sample-app
 
 jobs:
-  build-todo-web:
+  build-sample-web:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -45,21 +45,21 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}
+        images: ${{ env.REGISTRY }}/${{ github.repository }}/sample-web
         tags: |
-          type=ref,event=branch,suffix=-web
-          type=ref,event=pr,suffix=-web
-          type=raw,value=web,enable={{is_default_branch}}
+          type=ref,event=branch,suffix=-sample-web
+          type=ref,event=pr,suffix=-sample-web
+          type=raw,value=sample-web,enable={{is_default_branch}}
 
-    - name: Build and push Docker image for todo-web
+    - name: Build and push Docker image for sample-web
       run: |
         ./mvnw spring-boot:build-image \
-          -pl todo-web \
+          -pl sample-web \
           -DskipTests \
-          -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:web \
+          -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/sample-web:latest \
           -Dspring-boot.build-image.publish=true
 
-  build-todo-webflux:
+  build-sample-webflux:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -93,16 +93,16 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}
+        images: ${{ env.REGISTRY }}/${{ github.repository }}/sample-webflux
         tags: |
-          type=ref,event=branch,suffix=-webflux
-          type=ref,event=pr,suffix=-webflux
-          type=raw,value=webflux,enable={{is_default_branch}}
+          type=ref,event=branch,suffix=-sample-webflux
+          type=ref,event=pr,suffix=-sample-webflux
+          type=raw,value=sample-webflux,enable={{is_default_branch}}
 
-    - name: Build and push Docker image for todo-webflux
+    - name: Build and push Docker image for sample-webflux
       run: |
         ./mvnw spring-boot:build-image \
-          -pl todo-webflux \
+          -pl sample-webflux \
           -DskipTests \
-          -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:webflux \
+          -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/sample-webflux:latest \
           -Dspring-boot.build-image.publish=true

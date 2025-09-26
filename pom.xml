@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.example</groupId>
-	<artifactId>todo</artifactId>
+	<artifactId>sample</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>todo</name>
+	<name>sample</name>
 
 	<modules>
-		<module>todo-web</module>
-		<module>todo-webflux</module>
+		<module>sample-web</module>
+		<module>sample-webflux</module>
 	</modules>
 </project>

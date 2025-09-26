@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/tmiya-tech/20251115_sample-app/todo-app:webflux
+    image: ghcr.io/tmiya-tech/20251115_sample-app/sample-webflux
     restart: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker

@@ -5,8 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 This is a multi-module Maven project demonstrating two different Spring Boot TODO application implementations:
-- `todo-web`: Traditional Spring MVC with JPA and blocking I/O
-- `todo-webflux`: Reactive implementation using WebFlux and R2DBC
+- `sample-web`: Traditional Spring MVC with JPA and blocking I/O
+- `sample-webflux`: Reactive implementation using WebFlux and R2DBC
 
 Both modules share the same API design and database schema but use different technology stacks.
 
@@ -18,8 +18,8 @@ Both modules share the same API design and database schema but use different tec
 mvn clean package
 
 # Build specific module
-mvn clean package -pl todo-web
-mvn clean package -pl todo-webflux
+mvn clean package -pl sample-web
+mvn clean package -pl sample-webflux
 ```
 
 ### Running Applications
@@ -27,11 +27,11 @@ mvn clean package -pl todo-webflux
 # Start PostgreSQL database
 docker-compose up -d
 
-# Run todo-web (blocking)
-mvn spring-boot:run -pl todo-web
+# Run sample-web (blocking)
+mvn spring-boot:run -pl sample-web
 
-# Run todo-webflux (reactive)
-mvn spring-boot:run -pl todo-webflux
+# Run sample-webflux (reactive)
+mvn spring-boot:run -pl sample-webflux
 ```
 
 ### Testing
@@ -40,8 +40,8 @@ mvn spring-boot:run -pl todo-webflux
 mvn test
 
 # Run tests for specific module
-mvn test -pl todo-web
-mvn test -pl todo-webflux
+mvn test -pl sample-web
+mvn test -pl sample-webflux
 ```
 
 ### Database
@@ -54,11 +54,11 @@ mvn test -pl todo-webflux
 ### Project Structure
 - Root POM acts as parent for multi-module setup
 - Each module is independently deployable Spring Boot application
-- Shared package structure: `com.example.todo.{web|webflux}`
+- Shared package structure: `com.example.sample.{web|webflux}.todo`
 
 ### Module Differences
-- **todo-web**: Uses Spring Web + JPA + PostgreSQL driver
-- **todo-webflux**: Uses Spring WebFlux + R2DBC + R2DBC PostgreSQL
+- **sample-web**: Uses Spring Web + JPA + PostgreSQL driver
+- **sample-webflux**: Uses Spring WebFlux + R2DBC + R2DBC PostgreSQL
 
 ### Common Layer Structure
 Both modules follow the same layered architecture:
