@@ -27,4 +27,5 @@ management:
         include: health,info,prometheus
   metrics:
     tags:
+      instance: ${HOSTNAME}
       application: ${spring.application.name}
