@@ -1,7 +1,6 @@
 package com.example.sample.web.todo.service;
 
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,36 +24,24 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
     
-    private void randomSleep() {
-        int millis = ThreadLocalRandom.current().nextInt(100, 200);
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException ex) {
-        }
-    }
-    
     public TodoDto createTodo(CreateTodoRequest request) {
-        randomSleep();
         Todo todo = new Todo(request.getTitle(), request.getDescription());
         Todo savedTodo = todoRepository.save(todo);
         return new TodoDto(savedTodo);
     }
     
     public Optional<TodoDto> getTodo(Long id) {
-        randomSleep();
         return todoRepository.findById(id)
                 .map(TodoDto::new);
     }
     
     public Page<TodoDto> getTodos(int page, int size) {
-        randomSleep();
         Pageable pageable = PageRequest.of(page, size);
         return todoRepository.findAllByOrderByCreatedAtDesc(pageable)
                 .map(TodoDto::new);
     }
     
     public Optional<TodoDto> updateTodo(Long id, UpdateTodoRequest request) {
-        randomSleep();
         return todoRepository.findById(id)
                 .map(todo -> {
                     if (request.getTitle() != null) {
@@ -72,7 +59,6 @@ public class TodoService {
     }
     
     public Optional<TodoDto> completeTodo(Long id) {
-        randomSleep();
         return todoRepository.findById(id)
                 .map(todo -> {
                     todo.setDone(true);
@@ -82,7 +68,6 @@ public class TodoService {
     }
     
     public boolean deleteTodo(Long id) {
-        randomSleep();
         if (todoRepository.existsById(id)) {
             todoRepository.deleteById(id);
             return true;
