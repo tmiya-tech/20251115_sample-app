@@ -14,8 +14,5 @@ public record PrimeNumberRequest(
         if (end < start) {
             throw new IllegalArgumentException("end must be greater than or equal to start");
         }
-        if (end - start > 1_000_000) {
-            throw new IllegalArgumentException("range must not exceed 1,000,000");
-        }
     }
 }

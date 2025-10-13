@@ -1,8 +1,5 @@
 package com.example.sample.web.cpubound.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.example.sample.web.cpubound.dto.PrimeNumberRequest;
@@ -18,11 +15,11 @@ public class CpuBoundService {
     public PrimeNumberResponse calculatePrimes(PrimeNumberRequest request) {
         long startTime = System.currentTimeMillis();
 
-        List<Integer> primes = new ArrayList<>();
+        int primeCount = 0;
 
         for (int num = request.start(); num <= request.end(); num++) {
             if (isPrime(num)) {
-                primes.add(num);
+                primeCount++;
             }
         }
 
@@ -31,9 +28,8 @@ public class CpuBoundService {
         return new PrimeNumberResponse(
             request.start(),
             request.end(),
-            primes.size(),
-            calculationTime,
-            primes
+            primeCount,
+            calculationTime
         );
     }
 
