@@ -18,9 +18,7 @@ public class EcService {
     }
 
     public Mono<Void> buyItem(BuyItemRequest request) {
-        return callBackend("/api/inventory/reserve", request)
-                .then(callBackend("/api/payment/pay", request))
-                .then(callBackend("/api/shipping/setup", request));
+        return callBackend("/api/sleep", request);
     }
 
     private Mono<Void> callBackend(String path, BuyItemRequest request) {
