@@ -1,5 +1,6 @@
 package com.example.sample.web.todo.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.sample.web.todo.dto.CreateTodoRequest;
+import com.example.sample.web.todo.dto.SleepResponse;
 import com.example.sample.web.todo.dto.TodoDto;
 import com.example.sample.web.todo.dto.UpdateTodoRequest;
 import com.example.sample.web.todo.entity.Todo;
@@ -73,5 +75,22 @@ public class TodoService {
             return true;
         }
         return false;
+    }
+
+    public SleepResponse sleep(long sleepMs) {
+        LocalDateTime startTime = LocalDateTime.now();
+        long startNanos = System.nanoTime();
+
+        // Convert milliseconds to seconds for pg_sleep
+        double sleepSeconds = sleepMs / 1000.0;
+        todoRepository.sleep(sleepSeconds);
+
+        long endNanos = System.nanoTime();
+        LocalDateTime endTime = LocalDateTime.now();
+
+        // Calculate elapsed time in milliseconds
+        long elapsedMs = (endNanos - startNanos) / 1_000_000;
+
+        return new SleepResponse(startTime, endTime, elapsedMs);
     }
 }

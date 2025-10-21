@@ -1,6 +1,8 @@
 package com.example.sample.web.todo.controller;
 
 import com.example.sample.web.todo.dto.CreateTodoRequest;
+import com.example.sample.web.todo.dto.SleepRequest;
+import com.example.sample.web.todo.dto.SleepResponse;
 import com.example.sample.web.todo.dto.TodoDto;
 import com.example.sample.web.todo.dto.UpdateTodoRequest;
 import com.example.sample.web.todo.service.TodoService;
@@ -63,5 +65,11 @@ public class TodoController {
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
         boolean deleted = todoService.deleteTodo(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/sleep")
+    public ResponseEntity<SleepResponse> sleep(@RequestBody SleepRequest request) {
+        SleepResponse response = todoService.sleep(request.getSleepMs());
+        return ResponseEntity.ok(response);
     }
 }

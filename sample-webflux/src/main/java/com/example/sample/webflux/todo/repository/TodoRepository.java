@@ -8,6 +8,6 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface TodoRepository extends R2dbcRepository<Todo, Long> {
-    
+
     Flux<Todo> findAllBy(Pageable pageable);
 }

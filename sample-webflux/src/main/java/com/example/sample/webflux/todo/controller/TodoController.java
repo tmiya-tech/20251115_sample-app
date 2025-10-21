@@ -1,6 +1,8 @@
 package com.example.sample.webflux.todo.controller;
 
 import com.example.sample.webflux.todo.dto.CreateTodoRequest;
+import com.example.sample.webflux.todo.dto.SleepRequest;
+import com.example.sample.webflux.todo.dto.SleepResponse;
 import com.example.sample.webflux.todo.dto.TodoDto;
 import com.example.sample.webflux.todo.dto.UpdateTodoRequest;
 import com.example.sample.webflux.todo.service.TodoService;
@@ -63,8 +65,14 @@ public class TodoController {
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> deleteTodo(@PathVariable Long id) {
         return todoService.deleteTodo(id)
-                .map(deleted -> deleted ? 
-                        ResponseEntity.noContent().<Void>build() : 
+                .map(deleted -> deleted ?
+                        ResponseEntity.noContent().<Void>build() :
                         ResponseEntity.notFound().<Void>build());
+    }
+
+    @PostMapping("/sleep")
+    public Mono<ResponseEntity<SleepResponse>> sleep(@RequestBody SleepRequest request) {
+        return todoService.sleep(request.getSleepMs())
+                .map(response -> ResponseEntity.ok(response));
     }
 }
