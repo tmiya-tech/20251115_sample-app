@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "POST",
-    "url": "/api/inventory/reserve"
+    "url": "/api/sleep"
   },
   "response": {
     "status": 200,
@@ -9,12 +9,9 @@
       "Content-Type": "application/json"
     },
     "jsonBody": {
-      "result": "reserved"
+      "result": "sleeped"
     },
-    "delayDistribution": {
-      "type": "lognormal",
-      "median": 200,
-      "sigma": 0.3
-    }
+    "fixedDelayMilliseconds": 50
   }
 }
+

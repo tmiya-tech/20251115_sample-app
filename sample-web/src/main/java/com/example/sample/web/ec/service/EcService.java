@@ -16,23 +16,8 @@ public class EcService {
   }
 
   public void buyItem(BuyItemRequest request) {
-    // 在庫確保APIを呼び出す
     backendClient.post()
-      .uri("/api/inventory/reserve")
-      .body(request)
-      .retrieve()
-      .toBodilessEntity();
-
-    // 決済APIを呼び出す
-    backendClient.post()
-      .uri("/api/payment/pay")
-      .body(request)
-      .retrieve()
-      .toBodilessEntity();
-
-    // 配送手配APIを呼び出す
-    backendClient.post()
-      .uri("/api/shipping/setup")
+      .uri("/api/sleep")
       .body(request)
       .retrieve()
       .toBodilessEntity();
