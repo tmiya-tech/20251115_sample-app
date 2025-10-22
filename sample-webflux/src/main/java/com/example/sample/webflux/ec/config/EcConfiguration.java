@@ -3,17 +3,22 @@ package com.example.sample.webflux.ec.config;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.ClientRequestObservationConvention;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import io.micrometer.observation.ObservationRegistry;
 
 @Configuration
 @EnableConfigurationProperties(EcProperties.class)
 public class EcConfiguration {
-
     @Bean
     @EcBackendClient
-    WebClient ecBackendClient(WebClient.Builder builder, EcProperties ecProperties) {
+    WebClient ecBackendClient(WebClient.Builder builder, EcProperties ecProperties,
+            ObservationRegistry observationRegistry, ClientRequestObservationConvention convention) {
         return builder
                 .baseUrl(ecProperties.getBackendBaseUrl())
+                .observationRegistry(observationRegistry)
+                .observationConvention(convention)
                 .build();
     }
 }
