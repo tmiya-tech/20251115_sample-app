@@ -9,7 +9,9 @@
         <mdc/> <!-- traceId/spanId が入る -->
         <message/>
         <arguments/>
-        <stackTrace/>
+        <stackTrace>
+          <fieldName>stack</fieldName>
+        </stackTrace>
       </providers>
     </encoder>
   </appender>
