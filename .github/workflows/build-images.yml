@@ -1,4 +1,4 @@
-name: Build Docker Images
+name: Build Multi-Platform Docker Images
 
 on:
   push:
@@ -8,18 +8,30 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: sample-app
 
 jobs:
-  build-sample-web:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
 
+    strategy:
+      matrix:
+        module: [sample-web, sample-webflux]
+        platform: [linux/amd64, linux/arm64]
+        include:
+          - platform: linux/amd64
+            tag-suffix: amd64
+          - platform: linux/arm64
+            tag-suffix: arm64
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
 
     - name: Set up JDK 24
       uses: actions/setup-java@v4
@@ -41,47 +53,28 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Extract metadata
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.REGISTRY }}/${{ github.repository }}/sample-web
-        tags: |
-          type=ref,event=branch,suffix=-sample-web
-          type=ref,event=pr,suffix=-sample-web
-          type=raw,value=sample-web,enable={{is_default_branch}}
-
-    - name: Build and push Docker image for sample-web
+    - name: Build and push Docker image for ${{ matrix.module }} (${{ matrix.platform }})
       run: |
         ./mvnw spring-boot:build-image \
-          -pl sample-web \
+          -pl ${{ matrix.module }} \
           -DskipTests \
-          -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/sample-web:latest \
+          -Dspring-boot.build-image.imagePlatform=${{ matrix.platform }} \
+          -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.module }}:${{ matrix.tag-suffix }} \
           -Dspring-boot.build-image.publish=true
 
-  build-sample-webflux:
+  create-manifest:
+    needs: build
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
 
+    strategy:
+      matrix:
+        module: [sample-web, sample-webflux]
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Set up JDK 24
-      uses: actions/setup-java@v4
-      with:
-        java-version: '24'
-        distribution: 'temurin'
-
-    - name: Cache Maven packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
-
     - name: Log in to Container Registry
       uses: docker/login-action@v3
       with:
@@ -89,20 +82,9 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Extract metadata
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.REGISTRY }}/${{ github.repository }}/sample-webflux
-        tags: |
-          type=ref,event=branch,suffix=-sample-webflux
-          type=ref,event=pr,suffix=-sample-webflux
-          type=raw,value=sample-webflux,enable={{is_default_branch}}
-
-    - name: Build and push Docker image for sample-webflux
+    - name: Create and push manifest for ${{ matrix.module }}
       run: |
-        ./mvnw spring-boot:build-image \
-          -pl sample-webflux \
-          -DskipTests \
-          -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}/sample-webflux:latest \
-          -Dspring-boot.build-image.publish=true
+        docker manifest create ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.module }}:latest \
+          --amend ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.module }}:amd64 \
+          --amend ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.module }}:arm64
+        docker manifest push ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.module }}:latest
