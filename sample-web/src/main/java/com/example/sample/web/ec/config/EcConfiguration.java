@@ -1,15 +1,10 @@
 package com.example.sample.web.ec.config;
 
-import java.net.http.HttpClient;
-import java.util.concurrent.Executors;
-
-import org.springframework.boot.autoconfigure.condition.ConditionalOnThreading;
-import org.springframework.boot.autoconfigure.thread.Threading;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.JdkClientHttpRequestFactory;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
 import io.micrometer.observation.ObservationRegistry;
 
@@ -18,30 +13,14 @@ import io.micrometer.observation.ObservationRegistry;
 public class EcConfiguration {
 
   @Bean
-  @ConditionalOnThreading(Threading.PLATFORM)
   @EcBackendClient
-  RestClient ecBackendClientPT(EcProperties ecProperties, ObservationRegistry observationRegistry) {
-    return RestClient.builder()
-        .requestFactory(new JdkClientHttpRequestFactory(HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_1_1)
-            .build()))
-        .baseUrl(ecProperties.getBackendBaseUrl())
-        .observationRegistry(observationRegistry)
+  RestTemplate ecBackendClient(RestTemplateBuilder builder, EcProperties ecProperties,
+      ObservationRegistry observationRegistry) {
+    RestTemplate restTemplate = builder
+        .rootUri(ecProperties.getBackendBaseUrl())
         .build();
-  }
-
-  @Bean
-  @ConditionalOnThreading(Threading.VIRTUAL)
-  @EcBackendClient
-  RestClient ecBackendClientVT(EcProperties ecProperties, ObservationRegistry observationRegistry) {
-    return RestClient.builder()
-        .requestFactory(new JdkClientHttpRequestFactory(HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_1_1)
-            .executor(Executors.newVirtualThreadPerTaskExecutor()) // バーチャルスレッドを使用
-            .build()))
-        .baseUrl(ecProperties.getBackendBaseUrl())
-        .observationRegistry(observationRegistry)
-        .build();
+    restTemplate.setObservationRegistry(observationRegistry);
+    return restTemplate;
   }
 
 }
