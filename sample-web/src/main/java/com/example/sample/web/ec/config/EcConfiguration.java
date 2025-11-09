@@ -24,6 +24,7 @@ public class EcConfiguration {
     return RestClient.builder()
         .requestFactory(new JdkClientHttpRequestFactory(HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
+            .executor(Executors.newCachedThreadPool()) // プラットフォームスレッドを使用
             .build()))
         .baseUrl(ecProperties.getBackendBaseUrl())
         .observationRegistry(observationRegistry)
